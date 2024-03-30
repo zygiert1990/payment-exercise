@@ -12,7 +12,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -42,10 +44,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public AuthenticationEntryPoint authEntryPoint() {
+        BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
+        entryPoint.setRealmName("realm");
+        return entryPoint;
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationEntryPoint authEntryPoint) throws Exception {
         httpSecurity.authorizeHttpRequests(httpRegistry -> httpRegistry
                         .requestMatchers("/register", "/user/**").permitAll()
                         .anyRequest().authenticated())
+                .httpBasic(configurer -> configurer.authenticationEntryPoint(authEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
     }

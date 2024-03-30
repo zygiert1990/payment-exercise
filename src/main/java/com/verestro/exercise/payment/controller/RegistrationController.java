@@ -2,6 +2,7 @@ package com.verestro.exercise.payment.controller;
 
 import com.verestro.exercise.payment.model.NotificationChannel;
 import com.verestro.exercise.payment.model.UserDTO;
+import com.verestro.exercise.payment.persistence.model.UserId;
 import com.verestro.exercise.payment.persistence.repository.UserRepository;
 import com.verestro.exercise.payment.service.RegistrationService;
 import jakarta.validation.Valid;
@@ -18,7 +19,7 @@ public class RegistrationController {
     private final UserRepository userRepository;
 
     @PostMapping(value = "register")
-    public ResponseEntity<String> register(@RequestBody @Valid UserDTO user) {
+    public ResponseEntity<UserId> register(@RequestBody @Valid UserDTO user) {
         return ResponseEntity.ok(registrationService.register(user));
     }
 

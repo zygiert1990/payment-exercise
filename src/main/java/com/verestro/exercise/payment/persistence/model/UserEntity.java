@@ -37,4 +37,8 @@ public class UserEntity {
     @Column(nullable = false)
     private NotificationChannel preferredNotificationChannel;
 
+    @OneToOne
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private AccountEntity account;
+
 }
