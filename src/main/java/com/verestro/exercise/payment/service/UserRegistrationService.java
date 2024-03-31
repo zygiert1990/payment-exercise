@@ -2,7 +2,7 @@ package com.verestro.exercise.payment.service;
 
 import com.verestro.exercise.payment.model.UserDTO;
 import com.verestro.exercise.payment.model.UserRegistrationDTO;
-import com.verestro.exercise.payment.persistence.model.UserId;
+import com.verestro.exercise.payment.model.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

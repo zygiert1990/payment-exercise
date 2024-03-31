@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import static java.util.Collections.emptyList;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +18,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .map(user -> new User(user.getUsername(), user.getPassword(), Collections.emptyList()))
-                .orElseThrow(() -> new SecurityException("Can not retrieve user!"));
+        return userRepository.findCredentials(username)
+                .map(user -> new User(user.getUsername(), user.getPassword(), emptyList()))
+                .orElseThrow(() -> new UsernameNotFoundException("Can not retrieve user credentials for given username: " + username));
     }
 
 }
