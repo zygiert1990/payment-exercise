@@ -26,7 +26,4 @@ public class AccountEntity {
     @Column(nullable = false)
     private int sum;
 
-    @OneToOne(mappedBy = "account")
-    private UserEntity user;
-
 }

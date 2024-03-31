@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.UUID;
 
@@ -37,7 +38,7 @@ public class UserEntity {
     @Column(nullable = false)
     private NotificationChannel preferredNotificationChannel;
 
-    @OneToOne
+    @OneToOne(cascade = MERGE)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private AccountEntity account;
 

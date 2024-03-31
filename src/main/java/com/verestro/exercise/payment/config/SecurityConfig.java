@@ -53,7 +53,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationEntryPoint authEntryPoint) throws Exception {
         httpSecurity.authorizeHttpRequests(httpRegistry -> httpRegistry
-                        .requestMatchers("/register", "/user/**").permitAll()
+                        .requestMatchers("/register").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(configurer -> configurer.authenticationEntryPoint(authEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable);
