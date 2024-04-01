@@ -55,7 +55,7 @@ class AccountRepositoryTest {
 
     private UserEntity createUserWithAccount() {
         return UserEntity.builder()
-                .username("username")
+                .username(USERNAME)
                 .password("password")
                 .phoneNumber("123123123")
                 .email("email@email.com")
