@@ -27,20 +27,16 @@ public class TransferService {
                     if (tc.count() > 3) {
                         return new TransferFailure("Exceeded maximum number of transfers for account number: " + transfer.getSourceAccount());
                     }
-                    if (tc.account().funds() - transfer.getAmount() < 0) {
+                    AccountDTO sourceAccount = tc.account();
+                    if (sourceAccount.funds() - transfer.getAmount() < 0) {
                         return new TransferFailure("Not enough funds for perform a transfer!");
                     }
-                    AccountDTO sourceAccount = tc.account();
-                    AccountDTO sourceUpdated = sourceAccount.toBuilder()
-                            .funds(tc.account().funds() - transfer.getAmount())
-                            .build();
-                    TransferCountDTO tcUpdated = tc.toBuilder()
-                            .account(sourceUpdated)
-                            .count(tc.count() + 1)
-                            .build();
-                    AccountDTO targetAccount = accountService.findByAccountNumber(transfer.getTargetAccount());
-                    AccountDTO targetAccountUpdated = targetAccount.toBuilder().funds(targetAccount.funds() + transfer.getAmount()).build();
-                    TransferAccountIds transferAccountIds = accountService.updateAccounts(targetAccountUpdated, tcUpdated);
+//                    AccountDTO sourceUpdated = updateSourceAccount(transfer, sourceAccount);
+//                    TransferCountDTO tcUpdated = updateTransferCount(tc, sourceUpdated);
+//                    AccountDTO targetAccount = accountService.findByAccountNumber(transfer.getTargetAccount());
+//                    AccountDTO targetAccountUpdated = targetAccount.toBuilder().funds(targetAccount.funds() + transfer.getAmount()).build();
+//                    TransferAccountIds transferAccountIds = accountService.updateAccountsFunds(targetAccountUpdated, tcUpdated);
+                    TransferAccountIds transferAccountIds = updateAccountsFunds(transfer, updateTransferCount(tc, updateSourceAccount(transfer, sourceAccount)));
                     // notify
                     return new TransferSuccessful();
                 })
@@ -49,19 +45,42 @@ public class TransferService {
                     if (sourceAccount.funds() - transfer.getAmount() < 0) {
                         return new TransferFailure("Not enough funds for perform a transfer!");
                     }
-                    AccountDTO sourceUpdated = sourceAccount.toBuilder()
-                            .funds(sourceAccount.funds() - transfer.getAmount())
-                            .build();
-                    TransferCountDTO tcUpdated = TransferCountDTO.builder()
-                            .account(sourceUpdated)
-                            .count(1)
-                            .build();
-                    AccountDTO targetAccount = accountService.findByAccountNumber(transfer.getTargetAccount());
-                    AccountDTO targetAccountUpdated = targetAccount.toBuilder().funds(targetAccount.funds() + transfer.getAmount()).build();
-                    TransferAccountIds transferAccountIds = accountService.updateAccounts(targetAccountUpdated, tcUpdated);
+//                    AccountDTO sourceUpdated = updateSourceAccount(transfer, sourceAccount);
+//                    TransferCountDTO tcUpdated = createTransferCount(sourceUpdated);
+//                    AccountDTO targetAccount = accountService.findByAccountNumber(transfer.getTargetAccount());
+//                    AccountDTO targetAccountUpdated = targetAccount.toBuilder().funds(targetAccount.funds() + transfer.getAmount()).build();
+//                    TransferAccountIds transferAccountIds = accountService.updateAccountsFunds(targetAccountUpdated, tcUpdated);
+                    TransferAccountIds transferAccountIds = updateAccountsFunds(transfer, createTransferCount(updateSourceAccount(transfer, sourceAccount)));
                     // notify
                     return new TransferSuccessful();
                 });
+    }
+
+    private TransferAccountIds updateAccountsFunds(TransferDTO transfer, TransferCountDTO transferCount) {
+        AccountDTO targetAccount = accountService.findByAccountNumber(transfer.getTargetAccount());
+        AccountDTO targetAccountUpdated = targetAccount.toBuilder().funds(targetAccount.funds() + transfer.getAmount()).build();
+        return accountService.updateAccountsFunds(targetAccountUpdated, transferCount);
+    }
+
+    private TransferCountDTO createTransferCount(AccountDTO sourceUpdated) {
+        return TransferCountDTO.builder()
+                .account(sourceUpdated)
+                .date(LocalDate.now())
+                .count(1)
+                .build();
+    }
+
+    private TransferCountDTO updateTransferCount(TransferCountDTO transferCount, AccountDTO sourceUpdated) {
+        return transferCount.toBuilder()
+                .account(sourceUpdated)
+                .count(transferCount.count() + 1)
+                .build();
+    }
+
+    private AccountDTO updateSourceAccount(TransferDTO transfer, AccountDTO sourceAccount) {
+        return sourceAccount.toBuilder()
+                .funds(sourceAccount.funds() - transfer.getAmount())
+                .build();
     }
 
 }

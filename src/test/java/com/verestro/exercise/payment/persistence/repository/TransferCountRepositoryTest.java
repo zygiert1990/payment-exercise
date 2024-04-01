@@ -20,24 +20,31 @@ class TransferCountRepositoryTest {
     @Autowired
     private TransferCountRepository transferCountRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     @Test
-    public void shouldFindByAccountNumberAndDate() {
+    void shouldFindByAccountNumberAndDate() {
         // given
-        transferCountRepository.save(createTransferCount());
+        transferCountRepository.save(createTransferCount(accountRepository.save(createAccount())));
         // when
         Optional<TransferCountEntity> result = transferCountRepository.findByAccountNumberAndDate(ACCOUNT_NUMBER, DATE);
         // then
         assertThat(result).isPresent();
     }
 
-    private TransferCountEntity createTransferCount() {
+    private TransferCountEntity createTransferCount(AccountEntity account) {
         return TransferCountEntity.builder()
                 .date(DATE)
                 .count(1)
-                .account(AccountEntity.builder()
-                        .accountNumber(ACCOUNT_NUMBER)
-                        .funds(100)
-                        .build())
+                .account(account)
+                .build();
+    }
+
+    private AccountEntity createAccount() {
+        return AccountEntity.builder()
+                .accountNumber(ACCOUNT_NUMBER)
+                .funds(100)
                 .build();
     }
 

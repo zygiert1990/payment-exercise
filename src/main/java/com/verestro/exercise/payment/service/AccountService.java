@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -44,10 +42,11 @@ public class AccountService {
     }
 
     @Transactional
-    public TransferAccountIds updateAccounts(AccountDTO account, TransferCountDTO transferCount) {
-        AccountEntity updatedAccount = accountRepository.save(accountMapper.map(account));
+    public TransferAccountIds updateAccountsFunds(AccountDTO targetAccount, TransferCountDTO transferCount) {
+        AccountEntity updatedTargetAccount = accountRepository.save(accountMapper.map(targetAccount));
+        accountRepository.save(accountMapper.map(transferCount.account()));
         TransferCountDTO updatedTransferCount = transferCountService.save(transferCount);
-        return new TransferAccountIds(updatedTransferCount.account().id(), updatedAccount.getId());
+        return new TransferAccountIds(updatedTransferCount.account().id(), updatedTargetAccount.getId());
     }
 
     private UserDTO tryAssignAccountToUser(AccountCode code) {

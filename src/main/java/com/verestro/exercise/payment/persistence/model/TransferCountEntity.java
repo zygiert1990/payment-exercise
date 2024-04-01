@@ -30,7 +30,7 @@ public class TransferCountEntity {
     @Column(nullable = false)
     private int count;
 
-    @ManyToOne(cascade = {PERSIST, MERGE}, fetch = LAZY)
+    @ManyToOne(cascade = MERGE, fetch = LAZY)
     @JoinColumn(name = "account_id")
     private AccountEntity account;
 
