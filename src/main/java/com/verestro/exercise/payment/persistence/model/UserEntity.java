@@ -38,7 +38,7 @@ public class UserEntity {
     @Column(nullable = false)
     private NotificationChannel preferredNotificationChannel;
 
-    @OneToOne(cascade = MERGE, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {PERSIST, MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private AccountEntity account;
 

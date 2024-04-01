@@ -6,24 +6,32 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.UUID;
 
 @Entity
-@Table(name = "ACCOUNTS")
+@Table(name = "TRANSFER_COUNT")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class AccountEntity {
+public class TransferCountEntity {
 
     @Id
     @GeneratedValue(strategy = UUID)
     private String id;
 
-    @Column(unique = true, length = 20, nullable = false)
-    private String accountNumber;
+    @Column(nullable = false)
+    private LocalDate date;
 
     @Column(nullable = false)
-    private int funds;
+    private int count;
+
+    @ManyToOne(cascade = {PERSIST, MERGE}, fetch = LAZY)
+    @JoinColumn(name = "account_id")
+    private AccountEntity account;
 
 }

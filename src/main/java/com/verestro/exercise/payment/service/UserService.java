@@ -6,6 +6,9 @@ import com.verestro.exercise.payment.persistence.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +20,7 @@ public class UserService {
     public UserDTO findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .map(userMapper::map)
-                .orElseThrow(() -> new EntityNotFoundException("Can not get logged user!"));
+                .orElseThrow(() -> new ResponseStatusException(BAD_REQUEST, "Can not find user by username: " + username));
     }
 
     public UserDTO save(UserDTO user) {
