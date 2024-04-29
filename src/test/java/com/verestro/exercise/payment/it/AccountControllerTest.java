@@ -6,12 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.MultiValueMap;
 
-import java.util.Map;
-
 import static com.verestro.exercise.payment.model.AccountCode.CODE_1;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.util.CollectionUtils.toMultiValueMap;
 
 public class AccountControllerTest extends BaseIntegrationTest {
 
@@ -23,7 +19,7 @@ public class AccountControllerTest extends BaseIntegrationTest {
     @Test
     void shouldCreateAccount() throws Exception {
         // given
-        MultiValueMap<String, String> params = getParams(CODE_1.name());
+        MultiValueMap<String, String> params = getCreateAccountParams(CODE_1.name());
         // when
         MvcResult result = authenticatedPostWithParam(ACCOUNT_URL, params);
         // then
@@ -34,15 +30,11 @@ public class AccountControllerTest extends BaseIntegrationTest {
     @Test
     void shouldNotCreateAccount() throws Exception {
         // given
-        MultiValueMap<String, String> params = getParams(null);
+        MultiValueMap<String, String> params = getCreateAccountParams((String) null);
         // when
         MvcResult result = authenticatedPostWithParam(ACCOUNT_URL, params);
         // then
         assertThatBadRequestResponse(result);
-    }
-
-    private MultiValueMap<String, String> getParams(String code) {
-        return toMultiValueMap(Map.of("code", singletonList(code)));
     }
 
 }
