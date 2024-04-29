@@ -1,4 +1,4 @@
-package com.verestro.exercise.payment.service;
+package com.verestro.exercise.payment.service.notification;
 
 import com.verestro.exercise.payment.model.UserCommunicationDTO;
 

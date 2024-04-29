@@ -1,12 +1,13 @@
 package com.verestro.exercise.payment.persistence.repository;
 
 import com.verestro.exercise.payment.persistence.model.AccountEntity;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface AccountRepository extends JpaRepository<AccountEntity, String> {
 
@@ -20,7 +21,10 @@ public interface AccountRepository extends JpaRepository<AccountEntity, String> 
             nativeQuery = true)
     boolean existsByAccountNumberAndUsername(@Param("accountNumber") String accountNumber, @Param("username") String username);
 
-    @EntityGraph(attributePaths = "transferCounts")
-    Optional<AccountEntity> findByAccountNumber(String accountNumber);
+    @Query(value = "FROM AccountEntity a WHERE a.accountNumber in :accountNumbers")
+    List<AccountEntity> findByAccountNumbers(@Param("accountNumbers") Set<String> accountNumbers);
+
+    @Query(value = "SELECT a.funds FROM ACCOUNTS a where a.account_number = :accountNumber", nativeQuery = true)
+    Optional<AccountFunds> findFundsByAccountNumber(@Param("accountNumber") String accountNumber);
 
 }

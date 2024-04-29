@@ -16,4 +16,7 @@ public interface TransferCountRepository extends JpaRepository<TransferCountEnti
             "where a.accountNumber = :accountNumber and tc.date = :date")
     Optional<TransferCountEntity> findByAccountNumberAndDate(@Param("accountNumber") String accountNumber, @Param("date") LocalDate date);
 
+    @Query(value = "select tc.count from TRANSFER_COUNT tc join ACCOUNTS a where a.account_number = :accountNumber and tc.date = :date", nativeQuery = true)
+    Optional<TransferCount> findTransferCountByAccountNumberAndDate(@Param("accountNumber") String accountNumber, @Param("date") LocalDate date);
+
 }

@@ -1,11 +1,10 @@
 package com.verestro.exercise.payment.controller;
 
 import com.verestro.exercise.payment.model.*;
-import com.verestro.exercise.payment.service.TransferService;
+import com.verestro.exercise.payment.service.transfer.TransferService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

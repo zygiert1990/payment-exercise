@@ -1,11 +1,14 @@
-package com.verestro.exercise.payment.service;
+package com.verestro.exercise.payment.service.notification;
 
 import com.verestro.exercise.payment.model.TransferAccountIds;
+import com.verestro.exercise.payment.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+@Async
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
