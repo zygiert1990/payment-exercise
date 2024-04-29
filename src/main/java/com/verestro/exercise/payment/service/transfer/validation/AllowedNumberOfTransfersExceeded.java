@@ -25,9 +25,9 @@ class AllowedNumberOfTransfersExceeded implements TransferValidationRule {
     }
 
     private Either<TransferResult, TransferDTO> checkIfTransferCountExceeded(TransferDTO transfer, TransferCount transferCount) {
-        return transferCount.getCount() > 3 ?
-                Either.left(new TransferFailure("Exceeded maximum number of transfers for account number: " + transfer.getSourceAccount())) :
-                Either.right(transfer);
+        return transferCount.getCount() < 3 ?
+                Either.right(transfer) :
+                Either.left(new TransferFailure("Exceeded maximum number of transfers for account number: " + transfer.getSourceAccount()));
     }
 
 }

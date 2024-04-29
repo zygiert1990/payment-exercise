@@ -19,7 +19,7 @@ class TargetAccountExists implements TransferValidationRule {
         if (accountService.existsByAccountNumber(transfer.getTargetAccount())) {
             return Either.right(transfer);
         } else {
-            return Either.left(new TransferFailure("Currently logged user is not owner of the source account!"));
+            return Either.left(new TransferFailure("Target account does not exist in the system!"));
         }
     }
 }

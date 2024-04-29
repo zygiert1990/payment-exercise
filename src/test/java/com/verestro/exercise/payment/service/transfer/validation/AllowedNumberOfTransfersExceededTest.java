@@ -41,7 +41,7 @@ class AllowedNumberOfTransfersExceededTest {
     @Test
     void shouldPassForThirdTransfer() {
         // given
-        when(transferCountService.findTransferCountByAccountNumberAndDate(eq(SOURCE_ACCOUNT), any())).thenReturn(Optional.of(() -> 3));
+        when(transferCountService.findTransferCountByAccountNumberAndDate(eq(SOURCE_ACCOUNT), any())).thenReturn(Optional.of(() -> 2));
         // when
         Either<TransferResult, TransferDTO> result = validate();
         // then
@@ -51,7 +51,7 @@ class AllowedNumberOfTransfersExceededTest {
     @Test
     void shouldFail() {
         // given
-        when(transferCountService.findTransferCountByAccountNumberAndDate(eq(SOURCE_ACCOUNT), any())).thenReturn(Optional.of(() -> 4));
+        when(transferCountService.findTransferCountByAccountNumberAndDate(eq(SOURCE_ACCOUNT), any())).thenReturn(Optional.of(() -> 3));
         // when
         Either<TransferResult, TransferDTO> result = validate();
         // then
