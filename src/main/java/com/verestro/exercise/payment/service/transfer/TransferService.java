@@ -24,8 +24,8 @@ public class TransferService {
         return transferValidator.validate(transfer).fold(identity(), this::processTransfer);
     }
 
-    private TransferSuccessful processTransfer(TransferDTO r) {
-        TransferAccountIds transferAccountIds = transferProcessor.process(r);
+    private TransferSuccessful processTransfer(TransferDTO transfer) {
+        TransferAccountIds transferAccountIds = transferProcessor.process(transfer);
         notificationService.notify(transferAccountIds);
         return new TransferSuccessful();
     }
