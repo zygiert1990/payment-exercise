@@ -19,7 +19,7 @@ class HasEnoughFunds implements TransferValidationRule {
     public Either<TransferResult, TransferDTO> validate(TransferDTO transfer) {
         return accountService.findFundsByAccountNumber(transfer.getSourceAccount())
                 .map(accountFunds -> checkIfEnoughFunds(accountFunds, transfer))
-                .orElseGet(() -> Either.right(transfer));
+                .orElseGet(() -> Either.left(new TransferFailure("Can not find funds for account: " + transfer.getSourceAccount())));
     }
 
     private Either<TransferResult, TransferDTO> checkIfEnoughFunds(AccountFunds accountFunds, TransferDTO transfer) {

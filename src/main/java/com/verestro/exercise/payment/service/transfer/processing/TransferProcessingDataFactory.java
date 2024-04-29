@@ -39,7 +39,7 @@ class TransferProcessingDataFactory {
 
     private TransferCountDTO retrieveTransferCount(TransferDTO transfer) {
         return transferCountService.findByAccountNumberAndDate(transfer.getSourceAccount(), LocalDate.now())
-                .orElseGet(() -> TransferCountDTO.builder().count(0).date(LocalDate.now()).build());
+                .orElseGet(() -> TransferCountDTO.builder().count(1).date(LocalDate.now()).build());
     }
 
 }
